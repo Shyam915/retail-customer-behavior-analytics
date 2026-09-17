@@ -1,0 +1,34 @@
+-- Power BI DAX measures
+Total Revenue = SUM(customer_behavior[purchase_amount])
+
+Total Orders = COUNTROWS(customer_behavior)
+
+Average Order Value = AVERAGE(customer_behavior[purchase_amount])
+
+Average Rating = AVERAGE(customer_behavior[review_rating])
+
+Total Customers = DISTINCTCOUNT(customer_behavior[customer_id])
+
+Subscriber Customers =
+CALCULATE(
+    [Total Customers],
+    customer_behavior[subscription_status] = "Yes"
+)
+
+Subscriber Share =
+DIVIDE([Subscriber Customers], [Total Customers])
+
+Discounted Orders =
+CALCULATE(
+    [Total Orders],
+    customer_behavior[discount_applied] = "Yes"
+)
+
+Discount Usage % =
+DIVIDE([Discounted Orders], [Total Orders])
+
+Revenue Share % =
+DIVIDE(
+    [Total Revenue],
+    CALCULATE([Total Revenue], ALL(customer_behavior))
+)
